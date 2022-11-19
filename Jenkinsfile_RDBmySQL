@@ -1,7 +1,7 @@
 pipeline {
   agent { dockerfile true }
   environment {
-    DB_CREDS=credentials('rdb_mysql-db-credentials')
+    DB_CREDS=credentials('rdb-mysql-db-credentials')
   }
   stages {
     stage('Status') {
