@@ -1,4 +1,4 @@
 FROM liquibase/liquibase
-RUN lpm docker mysql --global
+RUN lpm add mysql --global
 
 
