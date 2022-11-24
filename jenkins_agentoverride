@@ -22,7 +22,7 @@ pipeline {
   }
   post {
     always {
-    node('Built-In Node')
+    node('build-in')
     {
       cleanWs()
       }
