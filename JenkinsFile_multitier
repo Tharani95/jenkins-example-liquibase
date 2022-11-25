@@ -1,5 +1,5 @@
 pipeline {
-  agent none
+  agent any
   environment {
     DB_CREDS=credentials('rdb-mysql-db-credentials')
   }  
@@ -35,20 +35,20 @@ pipeline {
   
  
         stage('scm') {
-            agent { label('ansible') } 
+           
             steps {
                git 'https://github.com/Tharani95/java-maven-sample-war.git'
             }
         }
 	stage('build') {
-            agent { label('ansible') } 
+            
             steps {
                sh 'mvn clean package'
             }
         }
         stage('deploy') {
             
-            agent { label('ansible') } 
+            
             steps {
                sh 'ansible-playbook tomcat_deploy.yaml'
             }
