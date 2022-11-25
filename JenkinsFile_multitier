@@ -54,4 +54,11 @@ pipeline {
             }
         }
     }
+    post {
+    always {
+      node('build-in'){ 
+      cleanWs()
+      }
+    }
+  }
 }
