@@ -67,13 +67,14 @@ pipeline {
         }
       }
     }
-    stage('LiquibaseRollback')
-    {
-    when {
-          expression {
-                return stageResultMap
-           }
-        }
+    }
+    post {
+    success {
+      node('build-in'){ 
+      cleanWs()
+      }
+    }
+    failure{
     agent { 
          dockerfile
              {
@@ -84,13 +85,5 @@ pipeline {
         steps {
         sh 'liquibase rollback --url="jdbc:mysql://mysqldb3.c5kvdhfba2on.ap-south-1.rds.amazonaws.com:3306/myapp"  --changeLogFile=my_app-wrapper.xml --username=$DB_CREDS_USR --password=$DB_CREDS_PSW --tag=wrapper1.0'
        }  
-     }
-    }
-    post {
-    always {
-      node('build-in'){ 
-      cleanWs()
-      }
-    }
   }
 }
