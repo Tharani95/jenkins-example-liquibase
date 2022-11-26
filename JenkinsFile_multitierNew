@@ -77,7 +77,7 @@ pipeline {
         }
 	when {
           expression {
-                return stageResultMap.find{ it.key == "didB1Succeed" }?.value
+                return stageResultMap
            }
         }
         steps {
