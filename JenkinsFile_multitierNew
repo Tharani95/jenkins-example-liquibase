@@ -33,8 +33,7 @@ pipeline {
         sh 'liquibase update --url="jdbc:mysql://mysqldb3.c5kvdhfba2on.ap-south-1.rds.amazonaws.com:3306/myapp" --changeLogFile=my_app-wrapper.xml --username=$DB_CREDS_USR --password=$DB_CREDS_PSW'
       }
     }
- stage('TomcatDeployAndLiquibaseRollback') {
-   parallel {
+
     stage('TomcatDeploy')
      {  
       stages{
@@ -86,7 +85,6 @@ pipeline {
        }  
      }
     }
-    }}
     post {
     always {
       node('build-in'){ 
