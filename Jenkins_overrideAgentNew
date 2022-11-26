@@ -25,7 +25,7 @@ pipeline {
     }
    stage('rollback') {
       steps {
-        sh 'liquibase rollback-one-update --url="jdbc:mysql://mysqldb3.c5kvdhfba2on.ap-south-1.rds.amazonaws.com:3306/myapp" --liquibaseProLicenseKey="aei76ou32thp785463214" --changeLogFile=my_app-wrapper.xml --username=$DB_CREDS_USR --password=$DB_CREDS_PSW'
+        sh 'liquibase rollback --url="jdbc:mysql://mysqldb3.c5kvdhfba2on.ap-south-1.rds.amazonaws.com:3306/myapp"  --changeLogFile=my_app-wrapper.xml --username=$DB_CREDS_USR --password=$DB_CREDS_PSW'
       }
     }
   }
