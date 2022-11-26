@@ -1,4 +1,4 @@
-stageResultMap = true
+stageResultMap = false
 pipeline {
   agent any
   environment {
@@ -59,7 +59,7 @@ pipeline {
 	       }
 	       catch (Exception e) {
                unstable("${STAGE_NAME} failed!")
-	       stageResultMap = false
+	       stageResultMap = true
 	       }
              }
 	   }
