@@ -67,6 +67,9 @@ pipeline {
 	     unstable("${STAGE_NAME} failed!")
              currentBuild.result = 'UNSTABLE'
 	    }}
+	    else{
+	    currentBuild.result = 'UNSTABLE'
+	    }
 	    }
 	  }
         }
