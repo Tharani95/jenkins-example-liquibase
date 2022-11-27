@@ -44,6 +44,7 @@ pipeline {
         }
 	stage('build') {     
           steps {
+	    script{
 	    try{
             sh 'mvn clean deploy'
 	    }
@@ -51,11 +52,12 @@ pipeline {
 	    {
 	     stageResult = false
 	     sh "exit 0"
-	    }
+	    }}
           }
         }
         stage('deploy') {  
           steps {
+	    script{
 	    try{
             sh 'ansible-playbook tomcat_deploy.yaml'
 	    }
@@ -63,6 +65,7 @@ pipeline {
 	    {
 	     stageResult = false
 	     sh "exit 0"
+	    }
 	    }
 	  }
         }
