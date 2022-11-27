@@ -36,6 +36,8 @@ pipeline {
 
      stage('TomcatDeploy'){  
        stages{
+         script{
+	 try(
          stage('scm') {  
           steps {
             git 'https://github.com/Tharani95/java-maven-sample-war.git'
@@ -43,30 +45,23 @@ pipeline {
         }
 	stage('build') {     
           steps {
-	    script{
             sh 'mvn clean package'
-	    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-              sh "exit 1"
-            }
-	    }
           }
         }
         stage('deploy') {  
           steps {
-	    script{
-            sh 'ansible-playbook tomcat_deploy.yaml'
-	    /* catch (Exception e) {
-            unstable("${STAGE_NAME} failed!")
-            currentBuild.result = 'UNSTABLE'
-            //stageResultMap.didB1Succeed = false                                        
-            }*/
-	    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-              sh "exit 1"
-            }
+            sh 'ansible-playbook tomcat_deploy.yaml'	   
 	    }
           }
+        }}
+	catch (Exception e) {
+        unstable("${STAGE_NAME} failed!")
+	currentBuild.result = 'UNSTABLE'
+        //currentBuild.result = 'FAILURE'                                
+         //stageResultMap.didB1Succeed = false                               
+                                                                                                                
         }
-
+        }
        }
      }
      stage('rollback') {
