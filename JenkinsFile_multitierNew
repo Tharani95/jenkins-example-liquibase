@@ -49,10 +49,11 @@ pipeline {
         stage('deploy') {  
           steps {
             sh 'ansible-playbook tomcat_deploy.yaml'
-	    catchError(buildResult: 'FAILURE', stageResult: 'FAILURE')
+	    sh 'echo ${currentBuild.result}'
+	   /* catchError(buildResult: 'FAILURE', stageResult: 'FAILURE')
 	    {
 	    sh 'exit 1'
-	    }
+	    }*/
 	    }
           }
        }
