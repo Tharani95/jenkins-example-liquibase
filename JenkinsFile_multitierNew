@@ -43,12 +43,19 @@ pipeline {
         }
 	stage('build') {     
           steps {
-            sh 'mvn clean package'
+            sh 'mvn clean deploy'
           }
         }
         stage('deploy') {  
           steps {
+	    try{
             sh 'ansible-playbook tomcat_deploy.yaml'
+	    }
+	    catch (Exception e) {
+            unstable("${STAGE_NAME} failed!")
+            currentBuild.result = 'FAILURE'
+            //stageResultMap.didB1Succeed = false                                        
+            }
           }
         }
 
