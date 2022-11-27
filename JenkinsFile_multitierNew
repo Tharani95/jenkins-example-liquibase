@@ -52,14 +52,14 @@ pipeline {
 	    {
 	     unstable("${STAGE_NAME} failed!")
              currentBuild.result = 'UNSTABLE'
-	     
+	     stageResult = false
 	    }}
           }
         }
         stage('deploy') {  
           steps {
 	    script{
-	    if (stageResult){
+	    if (stageResult == true){
 	    try{
             sh 'ansible-playbook tomcat_deploy.yaml'
 	    }
