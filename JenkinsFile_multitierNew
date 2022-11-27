@@ -44,7 +44,7 @@ pipeline {
 	stage('build') {     
           steps {
 	    script{
-            sh 'mvn clean deploy'
+            sh 'mvn clean package'
 	    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
               sh "exit 1"
             }
