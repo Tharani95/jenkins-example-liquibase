@@ -43,7 +43,15 @@ pipeline {
         }
 	stage('build') {     
           steps {
+	    script{
+	    try{
             sh 'mvn clean deploy'
+	    }
+	    catch (Exception e) {
+            unstable("${STAGE_NAME} failed!")
+            currentBuild.result = 'UNSTABLE'
+	    }
+	    }
           }
         }
         stage('deploy') {  
@@ -54,7 +62,7 @@ pipeline {
 	    }
 	    catch (Exception e) {
             unstable("${STAGE_NAME} failed!")
-            currentBuild.result = 'FAILURE'
+            currentBuild.result = 'UNSTABLE'
             //stageResultMap.didB1Succeed = false                                        
             }
 	    }
