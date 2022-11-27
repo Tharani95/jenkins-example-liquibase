@@ -61,6 +61,7 @@ pipeline {
 	    script{
 	    if (stageResult == true){
 	    try{
+	    sh 'echo ${stageResult}'
             sh 'ansible-playbook tomcat_deploy.yaml'
 	    }
 	    catch (Exception e)
