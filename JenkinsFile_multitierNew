@@ -61,15 +61,17 @@ pipeline {
 	    script{
 	    if (stageResult == true){
 	    try{
-	    sh 'echo ${stageResult}'
+	    sh 'echo "try"'
             sh 'ansible-playbook tomcat_deploy.yaml'
 	    }
 	    catch (Exception e)
 	    {
+	     sh 'echo "catch"'
 	     unstable("${STAGE_NAME} failed!")
              currentBuild.result = 'UNSTABLE'
 	    }}
 	    else{
+	    sh 'echo "else"'
 	    currentBuild.result = 'UNSTABLE'
 	    }
 	    }
