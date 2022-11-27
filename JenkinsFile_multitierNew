@@ -44,9 +44,7 @@ pipeline {
 	stage('build') {     
           steps {
 	    script{
-	    try{
             sh 'mvn clean deploy'
-	    }
 	    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
               sh "exit 1"
             }
@@ -56,9 +54,7 @@ pipeline {
         stage('deploy') {  
           steps {
 	    script{
-	    try{
             sh 'ansible-playbook tomcat_deploy.yaml'
-	    }
 	    /* catch (Exception e) {
             unstable("${STAGE_NAME} failed!")
             currentBuild.result = 'UNSTABLE'
