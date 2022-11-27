@@ -71,9 +71,7 @@ pipeline {
              currentBuild.result = 'UNSTABLE'
 	    }}
 	    else{
-	    sh 'echo "else"'
 	    currentBuild.result = 'UNSTABLE'
-	    sh 'echo "currentBuild.currentResult : ${currentBuild.currentResult}"'
 	    sh 'echo "currentBuild.result : ${currentBuild.result}"'
 	    }
 	    }
