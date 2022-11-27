@@ -71,8 +71,8 @@ pipeline {
              currentBuild.result = 'UNSTABLE'
 	    }}
 	    else{
+	    unstable("${STAGE_NAME} skipped!")
 	    currentBuild.result = 'UNSTABLE'
-	    sh 'echo "currentBuild.result : ${currentBuild.result}"'
 	    }
 	    }
 	  }
