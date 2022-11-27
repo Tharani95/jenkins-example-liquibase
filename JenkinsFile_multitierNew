@@ -46,7 +46,7 @@ pipeline {
           steps {
 	    script{
 	    try{
-            sh 'mvn clean deploy'
+            sh 'mvn clean package'
 	    }
 	    catch (Exception e)
 	    {
