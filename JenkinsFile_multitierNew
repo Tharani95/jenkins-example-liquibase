@@ -73,7 +73,8 @@ pipeline {
 	    else{
 	    sh 'echo "else"'
 	    currentBuild.result = 'UNSTABLE'
-	    currentStage.result =  'NOT_EXECUTED'
+	    sh 'echo "currentBuild.currentResult : ${currentBuild.currentResult}"'
+	    sh 'echo "currentBuild.result : ${currentBuild.result}"'
 	    }
 	    }
 	  }
