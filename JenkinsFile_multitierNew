@@ -33,7 +33,7 @@ pipeline {
       }
      }
 
-     stage('TomcatDeploy){  
+     stage('TomcatDeploy'){  
        stages{
          stage('scm') {  
           steps {
