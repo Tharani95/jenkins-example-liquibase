@@ -37,7 +37,7 @@ pipeline {
      stage('TomcatDeploy'){  
        stages{
          script{
-	 try(
+	 try{
          stage('scm') {  
           steps {
             git 'https://github.com/Tharani95/java-maven-sample-war.git'
