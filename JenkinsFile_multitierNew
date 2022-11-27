@@ -47,10 +47,9 @@ pipeline {
 	    try{
             sh 'mvn clean deploy'
 	    }
-	    catch (Exception e) {
-            unstable("${STAGE_NAME} failed!")
-            currentBuild.result = 'UNSTABLE'
-	    }
+	    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+              sh "exit 1"
+            }
 	    }
           }
         }
@@ -60,10 +59,13 @@ pipeline {
 	    try{
             sh 'ansible-playbook tomcat_deploy.yaml'
 	    }
-	    catch (Exception e) {
+	    /* catch (Exception e) {
             unstable("${STAGE_NAME} failed!")
             currentBuild.result = 'UNSTABLE'
             //stageResultMap.didB1Succeed = false                                        
+            }*/
+	    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+              sh "exit 1"
             }
 	    }
           }
