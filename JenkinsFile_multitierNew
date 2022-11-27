@@ -53,7 +53,7 @@ pipeline {
             sh 'ansible-playbook tomcat_deploy.yaml'	   
 	    }
           }
-        }}
+        }
 	catch (Exception e) {
         unstable("${STAGE_NAME} failed!")
 	currentBuild.result = 'UNSTABLE'
