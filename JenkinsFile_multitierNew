@@ -3,9 +3,9 @@ pipeline {
   environment {
     DB_CREDS=credentials('rdb-mysql-db-credentials')
   }  
-  stages {
-    
-    stage('Status') {
+ stages {
+
+   stage('Status') {
         
      agent { 
          dockerfile
@@ -31,37 +31,35 @@ pipeline {
       steps {
         sh 'liquibase update --url="jdbc:mysql://mysqldb3.c5kvdhfba2on.ap-south-1.rds.amazonaws.com:3306/myapp" --changeLogFile=my_app-wrapper.xml --username=$DB_CREDS_USR --password=$DB_CREDS_PSW'
       }
-    }
+     }
 
-    stage('TomcatDeploy)
-     {  
-      stages{
-        stage('scm') {
-           
-            steps {
-               git 'https://github.com/Tharani95/java-maven-sample-war.git'
-            }
+     stage('TomcatDeploy){  
+       stages{
+         stage('scm') {  
+          steps {
+            git 'https://github.com/Tharani95/java-maven-sample-war.git'
+          }
         }
-	stage('build') {
-            
-            steps {
-               sh 'mvn clean package'
-            }
+	stage('build') {     
+          steps {
+            sh 'mvn clean package'
+          }
         }
-        stage('deploy') {
-            
-            
-            steps {
-               sh 'ansible-playbook tomcat_deploy.yaml'
-            }
+        stage('deploy') {  
+          steps {
+            sh 'ansible-playbook tomcat_deploy.yaml'
+          }
         }
-      }
-    }}
-    post {
+
+       }
+     }
+ }
+ post {
     always {
       node('build-in'){ 
       cleanWs()
       }
     }
   }
+
 }
