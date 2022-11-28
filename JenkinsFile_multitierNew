@@ -1,8 +1,10 @@
 stageResult = true 
 pipeline {
-  def server_id = "JfrogArtifact"
-  def server = "Artifactory.server server_id"
-  def rtMaven = "Artifactory.newMavenBuild()"
+  //def server_id = "JfrogArtifact"
+  //def server = "Artifactory.server server_id"
+  //def rtMaven = "Artifactory.newMavenBuild()"
+  def server = Artifactory.server 'JfrogArtifact'
+  def rtMaven = Artifactory.newMavenBuild()
   def buildInfo
   agent any
   environment {
@@ -80,6 +82,30 @@ buildInfo.retention maxBuilds: 10, maxDays: 7, deleteBuildArtifacts: true
 buildInfo.env.capture = true
 }
 }}
+
+       stage('Execute Maven') {
+
+        steps {
+
+           script {
+
+             rtMaven.run pom: 'pom.xml', goals: 'clean install', buildInfo: buildInfo
+
+          }
+
+        }     
+    }
+
+
+
+    stage('Publish build info') {
+        steps {
+         script {
+        server.publishBuildInfo buildInfo
+        }
+       }
+
+    }
 	stage('build') {     
           steps {
 	    script{
