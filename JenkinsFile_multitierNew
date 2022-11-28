@@ -56,6 +56,26 @@ pipeline {
            }
 	   }
         }
+	 stage('Artifactory configuration'){
+
+steps {
+
+script {
+rtMaven.tool ='maven3'
+
+rtMaven.deployer releaseRepo: 'libs-release-local', 'libs-snapshot-local', server: JfrogArtifact
+
+rtMaven.resolver releaseRepo:'libs-release', snapshotRepo: 'libs-snapshot', server: JfrogArtifact
+
+rtMaven deployer.artifactDeploymentPatterns.addExclude("pom.xml")
+
+buildInfo = Artifactory.newBuildInfo()
+
+buildInfo.retention maxBuilds: 10, maxDays: 7, deleteBuildArtifacts: true
+
+buildInfo.env.capture = true
+}
+}
 	stage('build') {     
           steps {
 	    script{
@@ -69,6 +89,7 @@ pipeline {
 	    }}
           }
         }
+	
         stage('deploy') {  
           steps {
 	    script{
