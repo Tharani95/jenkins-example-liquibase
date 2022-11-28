@@ -1,7 +1,7 @@
 stageResult = true 
 pipeline {
-  def server = Artifactory.server
-  def rtMaven = Artifactory.newMavenBuild()
+  def server = 'Artifactory.server'
+  def rtMaven = 'Artifactory.newMavenBuild()'
   def buildInfo
   agent any
   environment {
