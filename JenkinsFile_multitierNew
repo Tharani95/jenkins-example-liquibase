@@ -152,8 +152,8 @@ script {
       steps {
         script{
 	if (stageResult == true){
-	   echo "if: $STAGE_NAME"
-	   sh 'exit 1'
+	  // echo "if: $STAGE_NAME"
+	    unstable("${STAGE_NAME} aborted!")
 	}
 	else{
 	echo "else: $STAGE_NAME"
