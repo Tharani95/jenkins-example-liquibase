@@ -63,7 +63,7 @@ pipeline {
 
 steps {
 script {
- def server = Artifactory.server 'JfrogArtifact'
+ def server = Artifactory.server 'ArtifactID'
  def rtMaven = Artifactory.newMavenBuild()
  def buildInfo
 rtMaven.tool ='maven3'
