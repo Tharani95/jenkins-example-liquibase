@@ -42,23 +42,38 @@ pipeline {
        stages{
          stage('scm') {  
           steps {
+	  script{
+	    try{
             git 'https://github.com/Tharani95/java-maven-sample-war.git'
+	    }
+	   catch(Exception e){
+	    unstable("${STAGE_NAME} failed!")
+	    stageResult = false
+	    }
+	  }
           }
         }
         stage('SonarQube analysis') {
            steps{
-             withSonarQubeEnv('SonarCloud'){
+	   script{
+	      try{
+	        withSonarQubeEnv('SonarCloud'){
                 sh "mvn sonar:sonar"
-             }   
+             }}
+	     catch(Exception e)
+	     {
+	       unstable("${STAGE_NAME} failed!")
+	       stageResult = false
+	     }
             }
         } 
-	stage('Quality Gate') {
+	/*stage('Quality Gate') {
 	  steps{
            timeout(time: 2, unit: 'MINUTES') {
              waitForQualityGate abortPipeline: true
            }
 	   }
-        }
+        }*/
 	 /*stage('Artifactory configuration') {
 
 steps {
