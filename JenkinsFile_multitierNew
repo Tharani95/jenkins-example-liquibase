@@ -1,6 +1,7 @@
 stageResult = true 
 pipeline {
-  def server = "Artifactory.server"
+  def server_id = "JfrogArtifact"
+  def server = "Artifactory.server server_id"
   def rtMaven = "Artifactory.newMavenBuild()"
   def buildInfo
   agent any
@@ -66,9 +67,9 @@ steps {
 script {
 rtMaven.tool ='maven3'
 
-rtMaven.deployer releaseRepo: 'libs-release-local', 'libs-snapshot-local', server: JfrogArtifact
+rtMaven.deployer releaseRepo: 'libs-release-local', 'libs-snapshot-local', server: server
 
-rtMaven.resolver releaseRepo:'libs-release', snapshotRepo: 'libs-snapshot', server: JfrogArtifact
+rtMaven.resolver releaseRepo:'libs-release', snapshotRepo: 'libs-snapshot', server: server
 
 rtMaven deployer.artifactDeploymentPatterns.addExclude("pom.xml")
 
