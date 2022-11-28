@@ -42,6 +42,13 @@ pipeline {
             git 'https://github.com/Tharani95/java-maven-sample-war.git'
           }
         }
+         stage('SonarQube analysis') {
+           steps{
+             withSonarQubeEnv('SonarCloud'){
+                sh "mvn sonar:sonar"
+             }   
+            }
+         } 
 	stage('build') {     
           steps {
 	    script{
