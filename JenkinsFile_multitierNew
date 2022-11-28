@@ -149,12 +149,17 @@ script {
                 filename 'Dockerfile'
             }
         }
-	when{
-	  stageResult: 'false'
-	}
       steps {
-	echo "stageRollbackResult: $STAGE_NAME"
+        script{
+	if (stageResult == true){
+	   echo "if: $STAGE_NAME"
+	   sh 'exit 1'
+	}
+	else{
+	echo "else: $STAGE_NAME"
         sh 'liquibase rollback --url="jdbc:mysql://mysqldb3.c5kvdhfba2on.ap-south-1.rds.amazonaws.com:3306/myapp"  --changeLogFile=my_app-wrapper.xml --username=$DB_CREDS_USR --password=$DB_CREDS_PSW --tag=wrapper1.0'
+	}
+	}
 	}
       
      }
