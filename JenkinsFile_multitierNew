@@ -42,13 +42,18 @@ pipeline {
             git 'https://github.com/Tharani95/java-maven-sample-war.git'
           }
         }
-         stage('SonarQube analysis') {
+        stage('SonarQube analysis') {
            steps{
              withSonarQubeEnv('SonarCloud'){
                 sh "mvn sonar:sonar"
              }   
             }
-         } 
+        } 
+	stage('Quality Gate') {
+           timeout(time: 2, unit: 'MINUTES') {
+             waitForQualityGate abortPipeline: true
+           }
+        }
 	stage('build') {     
           steps {
 	    script{
@@ -58,7 +63,6 @@ pipeline {
 	    catch (Exception e)
 	    {
 	     unstable("${STAGE_NAME} failed!")
-             
 	     stageResult = false
 	    }}
           }
