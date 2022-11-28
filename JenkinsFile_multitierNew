@@ -90,25 +90,21 @@ script {
         steps {
 
            script {
-
+               try{
             // rtMaven.run pom: 'pom.xml', goals: 'clean install', buildInfo: buildInfo
 	    sh 'mvn clean deploy'
+	    }
+	    catch (Exception e)
+	    {
+	     unstable("${STAGE_NAME} failed!")
+	     stageResult = false
+	    }
 	    }
 
         }     
     }
 
-
-
-    stage('Publish build info') {
-        steps {
-         script {
-        server.publishBuildInfo buildInfo
-        }
-       }
-
-    }
-	stage('build') {     
+	/*stage('build') {     
           steps {
 	    script{
 	    try{
@@ -120,7 +116,7 @@ script {
 	     stageResult = false
 	    }}
           }
-        }
+        }*/
 	
         stage('deploy') {  
           steps {
