@@ -1,5 +1,6 @@
 stageResult = true 
 pipeline {
+  def server = Artifactory.server
   agent any
   environment {
     DB_CREDS=credentials('rdb-mysql-db-credentials')
@@ -56,7 +57,7 @@ pipeline {
            }
 	   }
         }
-	 stage('Artifactory configuration'){
+	 stage('Artifactory configuration') {
 
 steps {
 
