@@ -59,7 +59,7 @@ pipeline {
            }
 	   }
         }
-	 stage('Artifactory configuration') {
+	 /*stage('Artifactory configuration') {
 
 steps {
 script {
@@ -83,7 +83,7 @@ script {
 
 //buildInfo.env.capture = true
 }
-}}
+}}*/
 
        stage('Execute Maven') {
 
