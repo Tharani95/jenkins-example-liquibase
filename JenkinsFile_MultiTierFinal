@@ -41,7 +41,7 @@ pipeline {
           steps {
 	  script{
 	    try{
-            git 'https://github.com/Tharani956/java-maven-sample-wa.git'
+            git 'https://github.com/Tharani95/java-maven-sample-war.git'
 	    }
 	   catch(Exception e){
 	    unstable("${STAGE_NAME} failed!")
@@ -54,7 +54,7 @@ pipeline {
            steps{
 	   script{
 	      try{
-	        withSonarQubeEnv('SonarCloud'){
+	        withSonarQubeEnv('SonarCloud1'){
                 sh "mvn sonar:sonar"
              }}
 	     catch(Exception e)
