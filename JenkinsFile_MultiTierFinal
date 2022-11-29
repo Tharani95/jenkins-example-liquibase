@@ -1,0 +1,149 @@
+stageResult = true 
+pipeline {
+  agent any
+  environment {
+    DB_CREDS=credentials('rdb-mysql-db-credentials')
+  }  
+ stages {
+
+   stage('Status') {
+        
+     agent { 
+         dockerfile
+             {
+                 label 'build-in'
+                filename 'Dockerfile'
+            }
+        }
+      steps {
+   
+        sh 'liquibase status --url="jdbc:mysql://mysqldb3.c5kvdhfba2on.ap-south-1.rds.amazonaws.com:3306/myapp" --changeLogFile=my_app-wrapper.xml  --username=$DB_CREDS_USR --password=$DB_CREDS_PSW'
+   
+      }
+    }
+    stage('Update') {
+       agent { 
+         dockerfile
+             {
+                 label 'build-in'
+                filename 'Dockerfile'
+            }
+        }   
+      steps {
+        sh 'liquibase update --url="jdbc:mysql://mysqldb3.c5kvdhfba2on.ap-south-1.rds.amazonaws.com:3306/myapp" --changeLogFile=my_app-wrapper.xml --username=$DB_CREDS_USR --password=$DB_CREDS_PSW'
+	sh 'liquibase tag wrapper1.0 --url="jdbc:mysql://mysqldb3.c5kvdhfba2on.ap-south-1.rds.amazonaws.com:3306/myapp" --username=$DB_CREDS_USR --password=$DB_CREDS_PSW'
+      }
+     }
+
+     stage('TomcatDeploy'){  
+       stages{
+         stage('scm') {  
+          steps {
+	  script{
+	    try{
+            git 'https://github.com/Tharani95/java-maven-sample-war.git'
+	    }
+	   catch(Exception e){
+	    unstable("${STAGE_NAME} failed!")
+	    stageResult = false
+	    }
+	  }
+          }
+        }
+        stage('SonarQube analysis') {
+           steps{
+	   script{
+	      try{
+	        withSonarQubeEnv('SonarCloud'){
+                sh "mvn sonar:sonar"
+             }}
+	     catch(Exception e)
+	     {
+	       unstable("${STAGE_NAME} failed!")
+	       stageResult = false
+	     }
+            }
+        } }
+	/*stage('Quality Gate') {
+	  steps{
+           timeout(time: 2, unit: 'MINUTES') {
+             waitForQualityGate abortPipeline: true
+           }
+	   }
+        }*/
+	
+
+       stage('Execute Maven') {
+
+        steps {
+
+           script {
+               try{
+            // rtMaven.run pom: 'pom.xml', goals: 'clean install', buildInfo: buildInfo
+	    sh 'mvn clean deploy'
+	    }
+	    catch (Exception e)
+	    {
+	     unstable("${STAGE_NAME} failed!")
+	     stageResult = false
+	    }
+	    }
+
+        }     
+    }
+
+        stage('deploy') {  
+          steps {
+	    script{
+	    if (stageResult == true){
+	    try{
+	    sh 'echo "try"'
+            sh 'ansible-playbook tomcat_deploy.yaml'
+	    }
+	    catch (Exception e)
+	    {
+	     sh 'echo "catch"'
+	     unstable("${STAGE_NAME} failed!")
+             stageResult = false
+	    }}
+	    else{
+	    unstable("${STAGE_NAME} skipped!")
+	    
+	    }
+	    }
+	  }
+        }
+       }
+     }
+     stage('rollback') {
+      agent { 
+         dockerfile
+             {
+                 label 'build-in'
+                filename 'Dockerfile'
+            }
+        }
+      steps {
+        script{
+	if (stageResult == true){
+	  // echo "if: $STAGE_NAME"
+	    unstable("${STAGE_NAME} aborted!")
+	}
+	else{
+	echo "else: $STAGE_NAME"
+        sh 'liquibase rollback --url="jdbc:mysql://mysqldb3.c5kvdhfba2on.ap-south-1.rds.amazonaws.com:3306/myapp"  --changeLogFile=my_app-wrapper.xml --username=$DB_CREDS_USR --password=$DB_CREDS_PSW --tag=wrapper1.0'
+	}
+	}
+	}
+      
+     }
+ }
+ post {
+    always {
+      node('build-in'){ 
+      cleanWs()
+      }
+    }
+  }
+
+}
