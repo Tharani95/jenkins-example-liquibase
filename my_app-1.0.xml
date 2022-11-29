@@ -10,8 +10,8 @@
                         http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd 
                         http://www.liquibase.org/xml/ns/dbchangelog 
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
-    <changeSet author="Darin Pope" id="create-countries8">
-        <createTable tableName="countries8">
+    <changeSet author="Darin Pope" id="create-countries9">
+        <createTable tableName="countries9">
             <column autoIncrement="true" name="id" type="INT">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
@@ -37,5 +37,8 @@
                 <constraints nullable="false"/>
             </column>
       </createTable>
+    </changeSet>
+    <changeSet author="userId" id="tag_version_0_1_0">
+        <tagDatabase tag="version_0.1.0" />
     </changeSet>
 </databaseChangeLog>
