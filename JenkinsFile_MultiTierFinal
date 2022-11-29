@@ -31,7 +31,7 @@ pipeline {
         }   
       steps {
         sh 'liquibase update --url="jdbc:mysql://mysqldb3.c5kvdhfba2on.ap-south-1.rds.amazonaws.com:3306/myapp" --changeLogFile=my_app-wrapper.xml --username=$DB_CREDS_USR --password=$DB_CREDS_PSW'
-	sh 'liquibase tag wrapper1.0 --url="jdbc:mysql://mysqldb3.c5kvdhfba2on.ap-south-1.rds.amazonaws.com:3306/myapp" --username=$DB_CREDS_USR --password=$DB_CREDS_PSW'
+	sh 'liquibase tag wrapper2.0 --url="jdbc:mysql://mysqldb3.c5kvdhfba2on.ap-south-1.rds.amazonaws.com:3306/myapp" --username=$DB_CREDS_USR --password=$DB_CREDS_PSW'
       }
      }
 
@@ -131,8 +131,8 @@ pipeline {
 	}
 	else{
 	echo "else: $STAGE_NAME"
-        //sh 'liquibase rollback --url="jdbc:mysql://mysqldb3.c5kvdhfba2on.ap-south-1.rds.amazonaws.com:3306/myapp"  --changeLogFile=my_app-wrapper.xml --username=$DB_CREDS_USR --password=$DB_CREDS_PSW --tag=wrapper1.0'
-	sh 'liquibase rollback-one-update --url="jdbc:mysql://mysqldb3.c5kvdhfba2on.ap-south-1.rds.amazonaws.com:3306/myapp"  --changeLogFile=my_app-wrapper.xml --username=$DB_CREDS_USR --password=$DB_CREDS_PSW --force'
+        sh 'liquibase rollback --url="jdbc:mysql://mysqldb3.c5kvdhfba2on.ap-south-1.rds.amazonaws.com:3306/myapp"  --changeLogFile=my_app-wrapper.xml --username=$DB_CREDS_USR --password=$DB_CREDS_PSW --tag=wrapper2.0'
+	//sh 'liquibase rollback-one-update --url="jdbc:mysql://mysqldb3.c5kvdhfba2on.ap-south-1.rds.amazonaws.com:3306/myapp"  --changeLogFile=my_app-wrapper.xml --username=$DB_CREDS_USR --password=$DB_CREDS_PSW --force'
 	}
 	}
 	}
