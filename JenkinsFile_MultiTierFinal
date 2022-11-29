@@ -41,7 +41,7 @@ pipeline {
           steps {
 	  script{
 	    try{
-            git 'https://github.com/Tharani95/java-maven-sample-war.git'
+            git 'https://github.com/Tharani95/java-maven-sample-war.git1'
 	    }
 	   catch(Exception e){
 	    unstable("${STAGE_NAME} failed!")
