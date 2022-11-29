@@ -54,7 +54,7 @@ pipeline {
            steps{
 	   script{
 	      try{
-	        withSonarQubeEnv('SonarCloud'){
+	        withSonarQubeEnv('SonarCloud') {
                 sh "mvn sonar:sonar"
              }}
 	     catch(Exception e)
