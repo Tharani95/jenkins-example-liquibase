@@ -80,7 +80,7 @@ pipeline {
            script {
                try{
             // rtMaven.run pom: 'pom.xml', goals: 'clean install', buildInfo: buildInfo
-	    sh 'mvn clean deploy'
+	    sh 'mvn clean deploys'
 	    }
 	    catch (Exception e)
 	    {
