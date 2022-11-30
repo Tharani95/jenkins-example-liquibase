@@ -38,8 +38,8 @@
             </column>
       </createTable>
     </changeSet>
-    <changeSet author="Darin Pope" id="create-countries16">
-        <createTable tableName="countries16">
+    <changeSet author="Darin Pope" id="create-countries17">
+        <createTable tableName="countries17">
             <column autoIncrement="true" name="id" type="INT">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
