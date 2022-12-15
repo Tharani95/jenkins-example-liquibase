@@ -1,0 +1,71 @@
+def readpomxml;
+pipeline{
+    agent {
+    label ('ansible')
+    }
+    tools{
+     maven 'maven3'
+    }
+    environment {
+    Vaultpass=credentials('Vaultpassword')
+    }  
+    stages{
+     stage('scm') {  
+       steps {
+
+
+           git 'https://github.com/Tharani95/java-maven-sample-war.git'
+
+       }
+     }
+     stage('readPomFile'){
+       steps{ 
+         script{  
+         readpomxml = readMavenPom file: 'pom.xml'
+         sh """echo "display artifact version: ${readpomxml.version}" """
+         sh 'pwd'
+         }
+       } 
+     }
+      stage('SonarQube analysis') {
+        steps{
+
+            withSonarQubeEnv('SonarCloud') {
+              sh "mvn sonar:sonar"
+             }
+
+         } 
+      
+        }
+        stage('Execute Maven') {
+         steps {
+
+            // rtMaven.run pom: 'pom.xml', goals: 'clean install', buildInfo: buildInfo
+	         sh 'mvn clean deploy'  
+	       }
+   
+       }   
+       stage('Vault'){
+         steps{
+              sh """
+               echo "${Vaultpass_PSW}" > ./vaultpass
+               """ 
+           }
+       } 
+	
+
+       stage('deploy') {  
+         steps {
+
+            // sh 'ansible-playbook tomcat_deploy1.yaml'
+           // sh 'cat ./vaultpass'
+             sh """ansible-playbook --extra-vars "version=${readpomxml.version}" --vault-password-file ./vaultpass tomcat_deploy1.yaml"""
+
+	      }
+        }
+          
+       
+    }      
+ 
+    
+}
